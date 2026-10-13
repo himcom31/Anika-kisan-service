@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://theorchardengine.com/sitemap.xml

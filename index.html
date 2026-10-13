@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- ===================== FAVICON & ICONS ===================== -->
+  <link rel="icon" type="image/png" href="/UserLogo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- ===================== VIEWPORT ===================== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ===================== PRIMARY SEO ===================== -->
+  <title>Orchard Engine — Fresh Groceries Delivered to Your Door</title>
+  <meta name="description"
+    content="Order fresh fruits, vegetables, dairy, and daily essentials online at Orchard Engine. Fast delivery, best prices, and 100% freshness guaranteed. Shop now at theorchardengine.com." />
+  <meta name="keywords"
+    content="online grocery store, fresh fruits delivery, vegetables online, dairy products, daily essentials, grocery delivery, fresh produce, orchard engine" />
+  <meta name="author" content="Orchard Engine" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="theme-color" content="#2d6a4f" />
+
+  <!-- ===================== CANONICAL ===================== -->
+   <link rel="canonical" href="https://theorchardengine.com/" />
+  
+
+  <!-- ===================== OPEN GRAPH (Facebook, WhatsApp, LinkedIn) ===================== -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Orchard Engine" />
+  <meta property="og:title" content="Orchard Engine — Fresh Groceries Delivered to Your Door" />
+  <meta property="og:description"
+    content="Order fresh fruits, vegetables, dairy, and daily essentials online. Fast delivery, best prices, and 100% freshness guaranteed." />
+  <meta property="og:url" content="https://theorchardengine.com" />
+  <meta property="og:image" content="https://theorchardengine.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Orchard Engine - Fresh Groceries Online" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- ===================== TWITTER CARD ===================== -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@OrchardEngine" />
+  <meta name="twitter:title" content="Orchard Engine — Fresh Groceries Delivered to Your Door" />
+  <meta name="twitter:description"
+    content="Order fresh fruits, vegetables, dairy, and daily essentials online. Fast delivery, best prices, and 100% freshness guaranteed." />
+  <meta name="twitter:image" content="https://theorchardengine.com/og-image.png" />
+  <meta name="twitter:image:alt" content="Orchard Engine - Fresh Groceries Online" />
+
+  <!-- ===================== GEO & LANGUAGE ===================== -->
+  <meta name="geo.region" content="IN" />
+  <meta name="geo.placename" content="India" />
+  <link rel="alternate" hreflang="en-in" href="https://theorchardengine.com" />
+  <link rel="alternate" hreflang="x-default" href="https://theorchardengine.com" />
+
+  <!-- ===================== GOOGLE SITE VERIFICATION ===================== -->
+  <!-- Replace YOUR_VERIFICATION_CODE_HERE with code from Google Search Console -->
+  <meta name="google-site-verification" content="662049138711fad3" />
+  <!-- ===================== STRUCTURED DATA (JSON-LD) ===================== -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GroceryStore",
+      "name": "Orchard Engine",
+      "url": "https://theorchardengine.com",
+      "logo": "https://theorchardengine.com/UserLogo.png",
+      "image": "https://theorchardengine.com/og-image.png",
+      "description": "Order fresh fruits, vegetables, dairy and daily essentials online. Fast delivery and best prices guaranteed.",
+      "priceRange": "₹₹",
+      "currenciesAccepted": "INR",
+      "paymentAccepted": "Cash, Credit Card, Debit Card, UPI",
+      "areaServed": "India",
+      "sameAs": [
+        "https://www.instagram.com/theorchardengine",
+        "https://www.facebook.com/theorchardengine"
+      ]
+    }
+    </script>
+
+  <!-- ===================== RAZORPAY ===================== -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- ===================== RESTORE PATH AFTER 404 REDIRECT ===================== -->
+  <script>
+    (function () {
+      var redirectPath = sessionStorage.getItem('redirectPath');
+      if (redirectPath && redirectPath !== '/') {
+        sessionStorage.removeItem('redirectPath');
+        window.history.replaceState(null, '', redirectPath);
+      }
+    })();
+  </script>
+
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
