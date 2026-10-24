@@ -17,7 +17,7 @@ const sendEmail = async (options) => {
 });
 
         await transporter.sendMail({
-            from:    `"Orchard Engine" <${config.mailFromAddress}>`,
+            from:    `"Anika Kisan Service" <${config.mailFromAddress}>`,
             to:      options.email,
             subject: options.subject,
             text:    options.message,

@@ -58,21 +58,21 @@ exports.createDriver = async (req, res) => {
                 // SMS: Welcome + Login Credentials
                 if (phone && password) {
                     const smsMessage =
-                        `Welcome to OrchardEngine, ${fullName}!\n\n` +
+                        `Welcome to Anika Kisan Service, ${fullName}!\n\n` +
                         `Your driver account is ready.\n\n` +
                         `Login Credentials:\n` +
                         `  Mobile  : ${phone}\n` +
                         `  Password: ${password}\n\n` +
                         `Keep your credentials safe.\n` +
-                        `– theorchardengine Team`;
+                        `– AnikaKisan Team`;
                     await sendSms(phone, smsMessage);
                 }
 
                 // Email notification
                 if (email) {
                     const message =
-                        `Welcome to OrchardEngine, ${fullName}!\n\n` +
-                        `Login Credentials:\n  Mobile: ${phone}\n  Password: ${password}\n\n– theorchardengine Team`;
+                        `Welcome to Anika Kisan Service, ${fullName}!\n\n` +
+                        `Login Credentials:\n  Mobile: ${phone}\n  Password: ${password}\n\n– AnikaKisan Team`;
                     const { subject, html } = driverWelcomeEmail(fullName, phone, password);
                     await sendNotification({ phone, email, subject, message, html });
                 }
@@ -176,10 +176,10 @@ exports.updateDriver = async (req, res) => {
                 (async () => {
                     const message =
                         `Hello ${driver.fullName}!\n\n` +
-                        `Your OrchardEngine driver account has been updated.\n` +
+                        `Your AnikaKisan Service driver account has been updated.\n` +
                         `New Password: ${password}\n\n` +
                         `If you did not request this change, contact support immediately.\n` +
-                        `– OrchardEngine Team`;
+                        `– AnikaKisan Team`;
                     await sendSms(driver.phone, message);
                 })(),
                 'update-driver-sms'
@@ -345,7 +345,7 @@ exports.markDelivered = async (req, res) => {
                 const message =
                     `Hello ${customerName || 'Customer'}!\n\n` +
                     `Your order #${order.id} has been delivered successfully.\n\n` +
-                    `Thank you for shopping with OrchardEngine!\n– theorchardengine Team`;
+                    `Thank you for shopping with AnikaKisan!\n– AnikaKisan Team`;
                 await sendNotification({ phone: customerPhone, email: customerEmail, subject, message, html });
                 if (customerPhone) await sendSms(customerPhone, message);
             })(),
@@ -407,7 +407,7 @@ exports.confirmPickup = async (req, res) => {
                     `Driver : ${driver?.fullName || 'Our Driver'}\n` +
                     `Phone  : ${driver?.phone || ''}\n\n` +
                     `Your order is on its way!\n` +
-                    `– theorchardengine Team`;
+                    `– AnikaKisan Team`;
                 await sendNotification({ phone: customerPhone, email: customerEmail, subject, message, html });
 
                 // SMS
@@ -481,7 +481,7 @@ exports.updateDriverOrderStatus = async (req, res) => {
                 const message =
                     `Hello ${customerName || 'Customer'}!\n\n` +
                     (statusMessages[status] || `Your order #${order.id} status: ${status}`) +
-                    `\n\n– theorchardengine Team`;
+                    `\n\n– AnikaKisan Team`;
 
                 // Email + push notification
                 const { subject, html } = orderStatusEmail(customerName || 'Customer', order.id, status);
@@ -561,7 +561,7 @@ exports.confirmPayment = async (req, res) => {
                 const message =
                     `Hello ${customerName || 'Customer'}!\n\n` +
                     `Payment of ₹${order.total} for order #${order.id} received via ${paymentMode}.\n` +
-                    `Thank you for shopping with OrchardEngine!\n– theorchardengine Team`;
+                    `Thank you for shopping with AnikaKisan!\n– AnikaKisan Team`;
                 await sendNotification({ phone: customerPhone, email: customerEmail, subject: 'Payment Received', message, html: message });
                 if (customerPhone) await sendSms(customerPhone, message);
             })(),

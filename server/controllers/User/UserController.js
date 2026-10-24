@@ -263,12 +263,12 @@ const forgotPassword = async (req, res) => {
 
 
         await transporter.sendMail({
-            from: `"OrchardEngine" <${process.env.EMAIL_USER}>`,
+            from: `"AnikaKisan Service" <${process.env.EMAIL_USER}>`,
             to: user.email,
-            subject: 'Reset Your Password — OrchardEngine',
+            subject: 'Reset Your Password — AnikaKisan',
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 480px; margin: auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px;">
-                    <h2 style="color: #16a34a; margin-bottom: 8px;">OrchardEngine</h2>
+                    <h2 style="color: #16a34a; margin-bottom: 8px;">AnikaKisan Service</h2>
                     <p style="color: #374151;">Hi <strong>${user.fullName}</strong>,</p>
                     <p style="color: #374151;">We received a request to reset your password. Click the button below to set a new one:</p>
                     <a href="${resetUrl}" style="display: inline-block; margin: 20px 0; padding: 12px 28px; background-color: #16a34a; color: white; text-decoration: none; border-radius: 999px; font-weight: 600; font-size: 14px;">
@@ -276,7 +276,7 @@ const forgotPassword = async (req, res) => {
                     </a>
                     <p style="color: #6b7280; font-size: 13px;">This link will expire in <strong>30 minutes</strong>. If you didn't request this, you can safely ignore this email.</p>
                     <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-                    <p style="color: #9ca3af; font-size: 12px;">© OrchardEngine. If the button doesn't work, copy this link: ${resetUrl}</p>
+                    <p style="color: #9ca3af; font-size: 12px;">© AnikaKisan Service. If the button doesn't work, copy this link: ${resetUrl}</p>
                 </div>
             `,
         });
