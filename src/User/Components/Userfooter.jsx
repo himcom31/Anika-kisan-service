@@ -452,7 +452,7 @@ const UserFooter = () => {
           <ul className="ofo-contact-list">
             <li>
               <MapPin size={18} />
-              <span>Raja Bazar 800014 ,Patna, Bihar</span>
+              <span>Aadarsh Nagar road no 2 phulwari Sharif Patna Bihar 801505</span>
             </li>
             <li>
               <Phone size={18} />
