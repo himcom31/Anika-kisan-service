@@ -6,8 +6,8 @@ import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 // ─── Feature card data (text screenshot jaisa hai, apne hisaab se badal sakte hain) ─
 const FEATURES = [
   {
-    title: "Free home delivery",
-    text: "Provide free home delivery for all products over ₹500",
+    title: "home delivery",
+    text: "Provide home delivery for all products ",
     icon: "truck",
   },
   {
@@ -16,8 +16,8 @@ const FEATURES = [
     icon: "award",
   },
   {
-    title: "3 Days Return",
-    text: "Return product within 3 days for any product you buy",
+    title: "3-4 Hours Return",
+    text: "Return product within 3 to 3 hours for any product you buy",
     icon: "return",
   },
   {

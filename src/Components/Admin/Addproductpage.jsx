@@ -23,10 +23,11 @@ function Label({ children, required }) {
     );
 }
 
+// text-base on mobile prevents iOS zoom-on-focus; sm: returns to normal size
 function Input({ className = "", ...props }) {
     return (
         <input
-            className={`w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent placeholder-gray-400 transition ${className}`}
+            className={`w-full min-w-0 px-3 py-2.5 sm:py-2 text-base sm:text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent placeholder-gray-400 transition ${className}`}
             {...props}
         />
     );
@@ -35,7 +36,7 @@ function Input({ className = "", ...props }) {
 function Textarea({ className = "", ...props }) {
     return (
         <textarea
-            className={`w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent placeholder-gray-400 transition resize-y ${className}`}
+            className={`w-full min-w-0 px-3 py-2 text-base sm:text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent placeholder-gray-400 transition resize-y ${className}`}
             {...props}
         />
     );
@@ -44,7 +45,7 @@ function Textarea({ className = "", ...props }) {
 function Select({ className = "", children, ...props }) {
     return (
         <select
-            className={`w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-gray-700 transition ${className}`}
+            className={`w-full min-w-0 px-3 py-2.5 sm:py-2 text-base sm:text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-gray-700 transition ${className}`}
             {...props}
         >
             {children}
@@ -54,12 +55,12 @@ function Select({ className = "", children, ...props }) {
 
 function SectionCard({ title, children, icon }) {
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="flex items-center gap-2.5 px-6 py-4 border-b border-gray-50 bg-gray-50/50">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden min-w-0">
+            <div className="flex items-center gap-2.5 px-4 sm:px-6 py-3.5 sm:py-4 border-b border-gray-50 bg-gray-50/50">
                 {icon && <span className="text-emerald-500">{icon}</span>}
                 <h2 className="text-sm font-bold text-gray-800 tracking-tight">{title}</h2>
             </div>
-            <div className="p-6">{children}</div>
+            <div className="p-4 sm:p-6">{children}</div>
         </div>
     );
 }
@@ -77,19 +78,19 @@ function Toast({ toast }) {
     if (!toast) return null;
     return (
         <div
-            style={{ animation: "toastIn 0.2s ease-out" }}
+            style={{ animation: "toastIn 0.2s ease-out", maxWidth: "calc(100vw - 32px)" }}
             className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg text-sm font-semibold text-white ${toast.type === "error" ? "bg-red-500" : "bg-emerald-500"}`}
         >
             {toast.type === "error" ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
             ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
             )}
-            {toast.msg}
+            <span>{toast.msg}</span>
         </div>
     );
 }
@@ -124,8 +125,7 @@ function RichEditor({ value, onChange }) {
 
     return (
         <div className="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-emerald-400 focus-within:border-transparent transition">
-            <div className="flex items-center gap-1 px-3 py-2 bg-gray-50 border-b border-gray-100 flex-wrap">
-                {/* ✅ Heading dropdown ab kaam karta hai */}
+            <div className="flex items-center gap-1 px-2 sm:px-3 py-2 bg-gray-50 border-b border-gray-100 flex-wrap">
                 <select
                     onChange={(e) => {
                         const map = { Normal: "P", H1: "H1", H2: "H2", H3: "H3" };
@@ -145,13 +145,12 @@ function RichEditor({ value, onChange }) {
                         title={btn.title}
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => execCmd(btn.cmd)}
-                        className={`h-7 w-7 flex items-center justify-center rounded text-sm font-bold text-gray-600 hover:bg-gray-200 transition-colors ${btn.label === "B" ? "font-black" : btn.label === "I" ? "italic" : btn.label === "U" ? "underline" : "line-through"}`}
+                        className={`h-8 w-8 sm:h-7 sm:w-7 flex items-center justify-center rounded text-sm font-bold text-gray-600 hover:bg-gray-200 transition-colors ${btn.label === "B" ? "font-black" : btn.label === "I" ? "italic" : btn.label === "U" ? "underline" : "line-through"}`}
                     >
                         {btn.label}
                     </button>
                 ))}
                 <div className="w-px h-5 bg-gray-200 mx-1" />
-                {/* ✅ UL / OL ab kaam karte hain */}
                 {LIST_BUTTONS.map((b) => (
                     <button
                         key={b.cmd}
@@ -159,14 +158,14 @@ function RichEditor({ value, onChange }) {
                         title={b.title}
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => execCmd(b.cmd)}
-                        className="h-7 w-7 flex items-center justify-center rounded text-xs text-gray-600 hover:bg-gray-200 transition-colors"
+                        className="h-8 w-8 sm:h-7 sm:w-7 flex items-center justify-center rounded text-xs text-gray-600 hover:bg-gray-200 transition-colors"
                     >
                         {b.icon}
                     </button>
                 ))}
                 <div className="w-px h-5 bg-gray-200 mx-1" />
                 {["🔗", "🖼", "📋", "f(x)"].map((ic) => (
-                    <button key={ic} type="button" className="h-7 px-1.5 flex items-center justify-center rounded text-xs text-gray-600 hover:bg-gray-200 transition-colors">{ic}</button>
+                    <button key={ic} type="button" className="h-8 sm:h-7 px-2 sm:px-1.5 flex items-center justify-center rounded text-xs text-gray-600 hover:bg-gray-200 transition-colors">{ic}</button>
                 ))}
             </div>
             <div
@@ -174,7 +173,7 @@ function RichEditor({ value, onChange }) {
                 contentEditable
                 suppressContentEditableWarning
                 onInput={(e) => onChange(e.currentTarget.innerHTML)}
-                className="pd-description min-h-[100px] px-4 py-3 text-sm text-gray-700 focus:outline-none"
+                className="pd-description min-h-[100px] px-4 py-3 text-base sm:text-sm text-gray-700 focus:outline-none"
                 data-placeholder="Enter product description…"
                 style={{ lineHeight: "1.6" }}
             />
@@ -241,7 +240,7 @@ function ImageDropzone({ label, hint, multiple = false, onChange, maxFiles = 1, 
             </Label>
             <div className="flex flex-wrap gap-3">
                 {allPreviews.map((item, i) => (
-                    <div key={i} className="relative h-24 w-24 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                    <div key={i} className="relative h-24 w-24 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
                         <img src={item.url} alt="" className="h-full w-full object-cover" />
                         <button
                             type="button"
@@ -250,7 +249,7 @@ function ImageDropzone({ label, hint, multiple = false, onChange, maxFiles = 1, 
                                     ? removeExisting(i)
                                     : removeBlob(i - existingPreviewUrls.length)
                             }
-                            className="absolute top-1 right-1 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs shadow"
+                            className="absolute top-1 right-1 h-7 w-7 sm:h-5 sm:w-5 rounded-full bg-red-500 text-white flex items-center justify-center text-sm sm:text-xs shadow"
                         >×</button>
                     </div>
                 ))}
@@ -260,7 +259,7 @@ function ImageDropzone({ label, hint, multiple = false, onChange, maxFiles = 1, 
                         onDrop={handleDrop}
                         onDragOver={e => e.preventDefault()}
                         onClick={() => inputRef.current.click()}
-                        className="h-24 w-24 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-300 hover:border-emerald-400 hover:text-emerald-400 transition-colors bg-gray-50 cursor-pointer"
+                        className="h-24 w-24 flex-shrink-0 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-300 hover:border-emerald-400 hover:text-emerald-400 active:bg-emerald-50 transition-colors bg-gray-50 cursor-pointer"
                     >
                         {allPreviews.length === 0 ? (
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -310,7 +309,7 @@ function TagInput({ tags, onChange }) {
             {tags.map((t) => (
                 <span key={t} className="flex items-center gap-1 bg-emerald-50 text-emerald-700 text-xs font-semibold px-2 py-0.5 rounded-full ring-1 ring-emerald-200">
                     {t}
-                    <button type="button" onClick={() => removeTag(t)} className="text-emerald-400 hover:text-emerald-600 text-sm leading-none">×</button>
+                    <button type="button" onClick={() => removeTag(t)} className="text-emerald-400 hover:text-emerald-600 text-sm leading-none px-0.5">×</button>
                 </span>
             ))}
             <input
@@ -318,18 +317,15 @@ function TagInput({ tags, onChange }) {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={addTag}
                 placeholder={tags.length === 0 ? "Write keywords and Press enter to add new one" : ""}
-                className="flex-1 min-w-[140px] text-sm focus:outline-none placeholder-gray-400 bg-transparent"
+                className="flex-1 min-w-[140px] text-base sm:text-sm focus:outline-none placeholder-gray-400 bg-transparent"
             />
         </div>
     );
 }
 
 // ─── Product Variants Section ─────────────────────────────────
-/**
- * variants = [{ label, sku, buyingPrice, sellingPrice, discountPrice, stockQuantity, minOrderQuantity, isDefault }]
- */
 const EMPTY_VARIANT = () => ({
-    _id: Math.random().toString(36).slice(2),   // local key only
+    _id: Math.random().toString(36).slice(2),
     label: "",
     sku: String(Math.floor(100000 + Math.random() * 900000)),
     buyingPrice: "",
@@ -344,14 +340,12 @@ function VariantsSection({ variants, onChange }) {
 
     function addVariant() {
         const next = [...variants, EMPTY_VARIANT()];
-        // If this is the first, mark it default
         if (next.length === 1) next[0].isDefault = true;
         onChange(next);
     }
 
     function removeVariant(idx) {
         const next = variants.filter((_, i) => i !== idx);
-        // If we removed the default, promote the first
         const hasDefault = next.some(v => v.isDefault);
         if (!hasDefault && next.length > 0) next[0].isDefault = true;
         onChange(next);
@@ -370,7 +364,6 @@ function VariantsSection({ variants, onChange }) {
         updateVariant(idx, "sku", String(Math.floor(100000 + Math.random() * 900000)));
     }
 
-    // Auto-compute discountPrice when buying/selling changes
     function handlePriceChange(idx, field, value) {
         const next = variants.map((v, i) => {
             if (i !== idx) return v;
@@ -398,7 +391,6 @@ function VariantsSection({ variants, onChange }) {
             }
         >
             <div className="space-y-4">
-                {/* Info banner */}
                 <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-xl border border-blue-100 text-xs text-blue-700">
                     <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -410,9 +402,8 @@ function VariantsSection({ variants, onChange }) {
                     </span>
                 </div>
 
-                {/* Variant rows */}
                 {variants.length === 0 ? (
-                    <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 text-sm">
+                    <div className="text-center py-8 px-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 text-sm">
                         No variants added yet. Click <strong className="text-emerald-600">+ Add Variant</strong> to start.
                     </div>
                 ) : (
@@ -420,11 +411,10 @@ function VariantsSection({ variants, onChange }) {
                         {variants.map((v, idx) => (
                             <div
                                 key={v._id}
-                                className={`relative rounded-xl border ${v.isDefault ? "border-emerald-300 bg-emerald-50/30" : "border-gray-200 bg-white"} p-4`}
+                                className={`relative rounded-xl border ${v.isDefault ? "border-emerald-300 bg-emerald-50/30" : "border-gray-200 bg-white"} p-3 sm:p-4`}
                             >
-                                {/* Row header */}
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className="flex items-center gap-2">
+                                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                                    <div className="flex items-center gap-2 flex-wrap">
                                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${v.isDefault ? "bg-emerald-500 text-white" : "bg-gray-100 text-gray-500"}`}>
                                             {v.isDefault ? "★ Default" : `Variant ${idx + 1}`}
                                         </span>
@@ -439,7 +429,7 @@ function VariantsSection({ variants, onChange }) {
                                             <button
                                                 type="button"
                                                 onClick={() => setDefault(idx)}
-                                                className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline"
+                                                className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline py-1"
                                             >
                                                 Set Default
                                             </button>
@@ -447,7 +437,7 @@ function VariantsSection({ variants, onChange }) {
                                         <button
                                             type="button"
                                             onClick={() => removeVariant(idx)}
-                                            className="h-6 w-6 flex items-center justify-center rounded-full bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-colors text-sm font-bold"
+                                            className="h-8 w-8 sm:h-6 sm:w-6 flex items-center justify-center rounded-full bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-colors text-base font-bold"
                                             title="Remove variant"
                                         >
                                             ×
@@ -455,9 +445,7 @@ function VariantsSection({ variants, onChange }) {
                                     </div>
                                 </div>
 
-                                {/* Fields grid */}
                                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                                    {/* Label */}
                                     <div className="col-span-2 sm:col-span-1">
                                         <Label required>Variant Label</Label>
                                         <Input
@@ -468,14 +456,13 @@ function VariantsSection({ variants, onChange }) {
                                         />
                                     </div>
 
-                                    {/* SKU */}
                                     <div>
                                         <div className="flex items-center justify-between mb-1.5">
                                             <Label required>SKU</Label>
                                             <button
                                                 type="button"
                                                 onClick={() => generateSku(idx)}
-                                                className="text-[10px] font-semibold text-emerald-600 hover:underline"
+                                                className="text-xs font-semibold text-emerald-600 hover:underline"
                                             >
                                                 Generate
                                             </button>
@@ -488,11 +475,11 @@ function VariantsSection({ variants, onChange }) {
                                         />
                                     </div>
 
-                                    {/* Old price */}
                                     <div>
                                         <Label required>Old Price (MRP)</Label>
                                         <Input
                                             type="number"
+                                            inputMode="decimal"
                                             value={v.buyingPrice}
                                             onChange={(e) => handlePriceChange(idx, "buyingPrice", e.target.value)}
                                             placeholder="0.00"
@@ -502,11 +489,11 @@ function VariantsSection({ variants, onChange }) {
                                         />
                                     </div>
 
-                                    {/* New / selling price */}
                                     <div>
                                         <Label required>New Price</Label>
                                         <Input
                                             type="number"
+                                            inputMode="decimal"
                                             value={v.sellingPrice}
                                             onChange={(e) => handlePriceChange(idx, "sellingPrice", e.target.value)}
                                             placeholder="0.00"
@@ -516,11 +503,11 @@ function VariantsSection({ variants, onChange }) {
                                         />
                                     </div>
 
-                                    {/* Discount — auto-computed, editable */}
                                     <div>
                                         <Label>Discount</Label>
                                         <Input
                                             type="number"
+                                            inputMode="decimal"
                                             value={v.discountPrice}
                                             onChange={(e) => updateVariant(idx, "discountPrice", e.target.value)}
                                             placeholder="0.00"
@@ -529,11 +516,11 @@ function VariantsSection({ variants, onChange }) {
                                         />
                                     </div>
 
-                                    {/* Stock */}
                                     <div>
                                         <Label required>Stock Qty</Label>
                                         <Input
                                             type="number"
+                                            inputMode="numeric"
                                             value={v.stockQuantity}
                                             onChange={(e) => updateVariant(idx, "stockQuantity", e.target.value)}
                                             placeholder="0"
@@ -542,11 +529,11 @@ function VariantsSection({ variants, onChange }) {
                                         />
                                     </div>
 
-                                    {/* Min order */}
                                     <div>
                                         <Label>Min Order Qty</Label>
                                         <Input
                                             type="number"
+                                            inputMode="numeric"
                                             value={v.minOrderQuantity}
                                             onChange={(e) => updateVariant(idx, "minOrderQuantity", e.target.value)}
                                             placeholder="1"
@@ -559,11 +546,10 @@ function VariantsSection({ variants, onChange }) {
                     </div>
                 )}
 
-                {/* Add button */}
                 <button
                     type="button"
                     onClick={addVariant}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-dashed border-emerald-300 rounded-xl text-sm font-semibold text-emerald-600 hover:border-emerald-400 hover:bg-emerald-50 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-2.5 border-2 border-dashed border-emerald-300 rounded-xl text-sm font-semibold text-emerald-600 hover:border-emerald-400 hover:bg-emerald-50 active:bg-emerald-50 transition-colors"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -586,12 +572,11 @@ function resolveId(field) {
 export default function AddProductPage({ existingProduct = null, onSaved, onCancel }) {
     const isEditMode = Boolean(existingProduct);
 
-    // ── Form state ─────────────────────────────────────────────
     const [name, setName] = useState("");
     const [slug, setSlug] = useState("");
     const [shortDesc, setShortDesc] = useState("");
     const [description, setDescription] = useState("");
-    const [descKey, setDescKey] = useState(0); // editor remount ke liye
+    const [descKey, setDescKey] = useState(0);
 
     const [brand, setBrand] = useState("");
     const [unit, setUnit] = useState("");
@@ -615,7 +600,6 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
     const [metaDesc, setMetaDesc] = useState("");
     const [metaKeywords, setMetaKeywords] = useState([]);
 
-    // ── variants ───────────────────────────────────────────────
     const [variants, setVariants] = useState([]);
 
     const [brands, setBrands] = useState([]);
@@ -662,7 +646,6 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
         );
         setAttributes(Array.isArray(p.attributes) ? p.attributes : []);
 
-        // ── load existing variants ─────────────────────────
         if (Array.isArray(p.variants) && p.variants.length > 0) {
             setVariants(
                 p.variants.map(v => ({
@@ -673,7 +656,7 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
         }
     }, [existingProduct]);
 
-    // ✅ Edit mode: poora product server se laakar description bharo
+    // Edit mode: poora product server se laakar description bharo
     useEffect(() => {
         if (!existingProduct?.id) return;
         apiFetch(`/${existingProduct.id}`)
@@ -736,7 +719,6 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
         );
     }
 
-    // ── Variant validation ────────────────────────────────────
     function validateVariants() {
         for (let i = 0; i < variants.length; i++) {
             const v = variants[i];
@@ -747,7 +729,6 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
             if (!v.stockQuantity && v.stockQuantity !== 0)
                 return `Variant ${i + 1}: Stock Qty is required`;
         }
-        // Check duplicate SKUs among variants
         const skus = variants.map(v => v.sku.trim());
         if (new Set(skus).size !== skus.length) return "Variants have duplicate SKUs";
         return null;
@@ -759,7 +740,6 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
         if (!isEditMode && !thumbnail) return showToast("Thumbnail image is required", "error");
         if (selectedCategories.length === 0) return showToast("Please select at least one category", "error");
 
-        // Validate variants
         const variantError = validateVariants();
         if (variantError) return showToast(variantError, "error");
 
@@ -784,7 +764,6 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
             fd.append("metaKeywords", JSON.stringify(metaKeywords));
             fd.append("attributes", JSON.stringify(attributes));
 
-            // send variants as JSON string (local _id hata do)
             const cleanVariants = variants.map(({ _id, ...v }) => v);
             fd.append("variants", JSON.stringify(cleanVariants));
 
@@ -831,13 +810,12 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
 
     // ── Render ────────────────────────────────────────────────
     return (
-        <div className="min-h-screen bg-gray-50 font-[Outfit,sans-serif]">
+        <div className="min-h-screen bg-gray-50 font-[Outfit,sans-serif] overflow-x-hidden">
             <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
         @keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
         [contenteditable]:empty:before { content: attr(data-placeholder); color: #9ca3af; }
 
-        /* ── Rich text styles (editor + storefront me same look) ── */
         .pd-description { word-break: break-word; }
         .pd-description p { margin: 0 0 10px; }
         .pd-description b, .pd-description strong { font-weight: 800; }
@@ -852,17 +830,18 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
         .pd-description h3 { font-size: 15px; font-weight: 700; margin: 10px 0 6px; }
         .pd-description a { color: #16a34a; text-decoration: underline; }
         .pd-description img { max-width: 100%; height: auto; border-radius: 8px; }
+        button { -webkit-tap-highlight-color: transparent; }
       `}</style>
 
             {/* Header */}
             <header className="bg-white border-b border-gray-100 sticky top-0 z-30">
-                <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-0 sm:h-14 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 min-w-0 flex-1">
                         {isEditMode && onCancel && (
                             <button
                                 type="button"
                                 onClick={onCancel}
-                                className="flex items-center gap-1.5 mr-2 text-gray-500 hover:text-gray-800 transition-colors"
+                                className="flex items-center gap-1 mr-1 text-gray-500 hover:text-gray-800 transition-colors py-1 flex-shrink-0"
                             >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -870,32 +849,32 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                 Back
                             </button>
                         )}
-                        <span className="font-semibold text-gray-800">Products</span>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span className="font-semibold text-gray-800 flex-shrink-0">Products</span>
+                        <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
-                        <span>{isEditMode ? "Edit Product" : "Add New Product"}</span>
+                        <span className="truncate">{isEditMode ? "Edit Product" : "Add New Product"}</span>
                     </div>
 
                     {isEditMode && (
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-lg border border-blue-100">
-                            <svg className="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-lg border border-blue-100 min-w-0">
+                            <svg className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                             <span className="text-xs font-semibold text-blue-600 truncate max-w-[200px]">Editing: {existingProduct?.name}</span>
                         </div>
                     )}
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 ml-auto">
                         <button type="button" onClick={isEditMode && onCancel ? onCancel : handleReset}
-                            className="px-4 py-2 text-xs font-semibold text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            className="px-3 sm:px-4 py-2 min-h-[36px] text-xs font-semibold text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors">
                             {isEditMode ? "Cancel" : "Reset"}
                         </button>
                         <button
                             type="button"
                             onClick={handleSubmit}
                             disabled={submitting}
-                            className="flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 disabled:opacity-60 text-white rounded-lg transition-colors shadow-sm shadow-emerald-200"
+                            className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[36px] text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 disabled:opacity-60 text-white rounded-lg transition-colors shadow-sm shadow-emerald-200"
                         >
                             {submitting && <Spinner />}
                             {submitting ? "Saving…" : isEditMode ? "Update Product" : "Submit"}
@@ -904,9 +883,9 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto px-6 py-6">
-                <div className="mb-5 flex items-center gap-3">
-                    <h1 className="text-xl font-bold text-gray-900">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+                <div className="mb-4 sm:mb-5 flex items-center gap-3 flex-wrap">
+                    <h1 className="text-lg sm:text-xl font-bold text-gray-900">
                         {isEditMode ? "Edit Product" : "Add New Product"}
                     </h1>
                     {isEditMode && (
@@ -914,10 +893,10 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                     )}
                 </div>
 
-                <form onSubmit={handleSubmit} className="grid grid-cols-[1fr_300px] gap-5 items-start">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-5 items-start">
 
                     {/* ── LEFT COLUMN ── */}
-                    <div className="space-y-5">
+                    <div className="space-y-5 min-w-0">
 
                         {/* Product Info */}
                         <SectionCard title="Product Info" icon={
@@ -932,15 +911,15 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                 </div>
                                 <div>
                                     <Label>Product Permalink/Slug</Label>
-                                    <div className="flex">
-                                        <span className="flex items-center px-3 text-xs text-gray-500 bg-gray-50 border border-r-0 border-gray-200 rounded-l-lg whitespace-nowrap">
+                                    <div className="flex flex-col sm:flex-row">
+                                        <span className="flex items-center px-3 py-2 text-[11px] sm:text-xs text-gray-500 bg-gray-50 border border-gray-200 rounded-t-lg sm:rounded-t-none sm:rounded-l-lg sm:border-r-0 break-all">
                                             https://anikakisan.com/products/
                                         </span>
                                         <input
                                             value={slug}
                                             onChange={(e) => setSlug(e.target.value)}
                                             placeholder="your-product-permalink"
-                                            className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent placeholder-gray-400 bg-white transition"
+                                            className="flex-1 min-w-0 px-3 py-2.5 sm:py-2 text-base sm:text-sm border border-gray-200 border-t-0 sm:border-t rounded-b-lg sm:rounded-b-none sm:rounded-r-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent placeholder-gray-400 bg-white transition"
                                         />
                                     </div>
                                 </div>
@@ -949,9 +928,9 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                     <Textarea value={shortDesc} onChange={(e) => setShortDesc(e.target.value)} rows={3} placeholder="Enter short description" required />
                                 </div>
                                 <div>
-                                    <div className="flex items-center gap-2 mb-1.5">
+                                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
                                         <Label required>Description</Label>
-                                        <button type="button" className="flex items-center gap-1 text-xs font-semibold text-white bg-emerald-500 hover:bg-emerald-600 px-2.5 py-1 rounded-lg transition-colors -mt-1">
+                                        <button type="button" className="flex items-center gap-1 text-xs font-semibold text-white bg-emerald-500 hover:bg-emerald-600 px-2.5 py-1.5 rounded-lg transition-colors">
                                             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 4a1 1 0 110 2 1 1 0 010-2zm0 4a1 1 0 011 1v4a1 1 0 11-2 0v-4a1 1 0 011-1z" /></svg>
                                             Generate AI
                                         </button>
@@ -967,7 +946,7 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         }>
-                            <div className="grid grid-cols-2 gap-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <Label>Select Brand</Label>
                                     <Select value={brand} onChange={(e) => setBrand(e.target.value)}>
@@ -981,14 +960,14 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                     <Label required>Unit</Label>
                                     <Input value={unit} onChange={(e) => setUnit(e.target.value)} placeholder="Unit (e.g. kg, pc, packet)" required />
                                 </div>
-                                <div className="col-span-2">
+                                <div className="sm:col-span-2">
                                     <div className="flex items-center justify-between mb-1.5">
                                         <Label required>Product SKU</Label>
-                                        <button type="button" onClick={generateSku} className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline">
+                                        <button type="button" onClick={generateSku} className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline py-1">
                                             Generate Code
                                         </button>
                                     </div>
-                                    <Input value={sku} onChange={(e) => setSku(e.target.value)} placeholder="SKU" required className="max-w-xs" />
+                                    <Input value={sku} onChange={(e) => setSku(e.target.value)} placeholder="SKU" required className="sm:max-w-xs" />
                                 </div>
                             </div>
                         </SectionCard>
@@ -999,40 +978,39 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         }>
-                            {/* Note when variants exist */}
                             {variants.length > 0 && (
-                                <div className="mb-4 flex items-center gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-700">
-                                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="mb-4 flex items-start gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-700">
+                                    <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    Variants added — base price is used as fallback if a variant is not selected.
+                                    <span>Variants added — base price is used as fallback if a variant is not selected.</span>
                                 </div>
                             )}
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                 <div>
                                     <Label required>Old Price</Label>
-                                    <Input type="number" value={buyingPrice} onChange={(e) => setBuyingPrice(e.target.value)} placeholder="0.00" min="0" step="0.01" required />
+                                    <Input type="number" inputMode="decimal" value={buyingPrice} onChange={(e) => setBuyingPrice(e.target.value)} placeholder="0.00" min="0" step="0.01" required />
                                 </div>
                                 <div>
                                     <Label required>New Price</Label>
-                                    <Input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} placeholder="0.00" min="0" step="0.01" required />
+                                    <Input type="number" inputMode="decimal" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} placeholder="0.00" min="0" step="0.01" required />
                                 </div>
                                 <div>
                                     <Label>Discount Price</Label>
-                                    <Input type="number" value={discountPrice} onChange={(e) => setDiscountPrice(e.target.value)} placeholder="0" min="0" step="0.01" />
+                                    <Input type="number" inputMode="decimal" value={discountPrice} onChange={(e) => setDiscountPrice(e.target.value)} placeholder="0" min="0" step="0.01" />
                                 </div>
                                 <div>
                                     <Label required>Current Stock Quantity</Label>
-                                    <Input type="number" value={stockQty} onChange={(e) => setStockQty(e.target.value)} placeholder="0" min="0" required />
+                                    <Input type="number" inputMode="numeric" value={stockQty} onChange={(e) => setStockQty(e.target.value)} placeholder="0" min="0" required />
                                 </div>
                                 <div>
                                     <Label>Minimum Order Quantity</Label>
-                                    <Input type="number" value={minOrderQty} onChange={(e) => setMinOrderQty(e.target.value)} placeholder="1" min="1" />
+                                    <Input type="number" inputMode="numeric" value={minOrderQty} onChange={(e) => setMinOrderQty(e.target.value)} placeholder="1" min="1" />
                                 </div>
                             </div>
                         </SectionCard>
 
-                        {/* ── Variants Section ── */}
+                        {/* Variants */}
                         <VariantsSection variants={variants} onChange={setVariants} />
 
                         {/* Images */}
@@ -1043,11 +1021,11 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                         }>
                             <div className="space-y-5">
                                 {isEditMode && existingThumbnail && !thumbnail && (
-                                    <div className="flex items-center gap-2 p-2.5 bg-blue-50 rounded-lg border border-blue-100 text-xs text-blue-600">
-                                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="flex items-start gap-2 p-2.5 bg-blue-50 rounded-lg border border-blue-100 text-xs text-blue-600">
+                                        <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        Current thumbnail will be kept unless you upload a new one.
+                                        <span>Current thumbnail will be kept unless you upload a new one.</span>
                                     </div>
                                 )}
                                 <ImageDropzone
@@ -1065,11 +1043,11 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                     existingUrls={existingAdditional}
                                 />
                                 <div>
-                                    <button type="button" className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-emerald-600 transition-colors">
+                                    <button type="button" className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-emerald-600 transition-colors py-1">
                                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                         Upload or Add Product Video
                                     </button>
-                                    <div className="mt-3 grid grid-cols-2 gap-4">
+                                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
                                             <Label>Select Video Type</Label>
                                             <Select value={videoType} onChange={(e) => setVideoType(e.target.value)}>
@@ -1120,13 +1098,13 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                         </SectionCard>
 
                         {/* Footer buttons */}
-                        <div className="flex justify-end gap-3 pb-6">
+                        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pb-6">
                             <button type="button" onClick={isEditMode && onCancel ? onCancel : handleReset}
-                                className="px-6 py-2.5 text-sm font-semibold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                                className="w-full sm:w-auto px-6 py-3 sm:py-2.5 text-sm font-semibold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors">
                                 {isEditMode ? "Cancel" : "Reset"}
                             </button>
                             <button type="submit" disabled={submitting}
-                                className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold bg-emerald-500 hover:bg-emerald-600 disabled:opacity-60 text-white rounded-xl transition-colors shadow-sm shadow-emerald-200">
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 sm:py-2.5 text-sm font-semibold bg-emerald-500 hover:bg-emerald-600 disabled:opacity-60 text-white rounded-xl transition-colors shadow-sm shadow-emerald-200">
                                 {submitting && <Spinner />}
                                 {submitting ? "Saving…" : isEditMode ? "Update Product" : "Submit"}
                             </button>
@@ -1134,14 +1112,14 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                     </div>
 
                     {/* ── RIGHT COLUMN ── */}
-                    <div className="space-y-5 sticky top-[72px]">
+                    <div className="space-y-5 min-w-0 lg:sticky lg:top-[72px]">
 
                         {/* Categories */}
                         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                             <div className="px-5 py-3.5 border-b border-gray-50 bg-gray-50/50">
                                 <h3 className="text-sm font-bold text-gray-800">Categories</h3>
                             </div>
-                            <div className="p-4 space-y-1 max-h-72 overflow-y-auto">
+                            <div className="p-3 sm:p-4 space-y-1 max-h-72 overflow-y-auto">
                                 {categoriesLoading ? (
                                     <div className="flex items-center gap-2 py-4 text-gray-400 text-xs">
                                         <svg className="animate-spin h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24">
@@ -1164,21 +1142,19 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
 
                                             return (
                                                 <div key={parent.id} className="mb-1">
-                                                    {/* Parent — sub nahi hai toh selectable */}
                                                     {!hasSubCats ? (
-                                                        <label className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors group">
+                                                        <label className="flex items-center gap-2.5 px-2 py-2 sm:py-1.5 rounded-lg cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors group">
                                                             <input
                                                                 type="checkbox"
                                                                 checked={selectedCategories.includes(parent.id)}
                                                                 onChange={() => toggleCategory(parent.id)}
-                                                                className="h-4 w-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-400 accent-emerald-500"
+                                                                className="h-5 w-5 sm:h-4 sm:w-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-400 accent-emerald-500"
                                                             />
                                                             <span className="text-sm font-semibold text-gray-800">
                                                                 {parent.name}
                                                             </span>
                                                         </label>
                                                     ) : (
-                                                        /* Parent disabled — sirf label */
                                                         <div className="flex items-center gap-2 px-2 py-1.5">
                                                             <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">
                                                                 📁 {parent.name}
@@ -1186,19 +1162,18 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                                                         </div>
                                                     )}
 
-                                                    {/* Sub Categories */}
                                                     {hasSubCats && (
                                                         <div className="ml-4 pl-3 border-l-2 border-emerald-100 space-y-0.5 mt-0.5">
                                                             {subCats.map((sub) => (
                                                                 <label
                                                                     key={sub.id}
-                                                                    className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-emerald-50 transition-colors group"
+                                                                    className="flex items-center gap-2.5 px-2 py-2 sm:py-1.5 rounded-lg cursor-pointer hover:bg-emerald-50 active:bg-emerald-50 transition-colors group"
                                                                 >
                                                                     <input
                                                                         type="checkbox"
                                                                         checked={selectedCategories.includes(sub.id)}
                                                                         onChange={() => toggleCategory(sub.id)}
-                                                                        className="h-4 w-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-400 accent-emerald-500"
+                                                                        className="h-5 w-5 sm:h-4 sm:w-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-400 accent-emerald-500"
                                                                     />
                                                                     <span className="text-sm text-gray-700 group-hover:text-gray-900">
                                                                         {sub.name}
@@ -1220,7 +1195,7 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                             </div>
                             {selectedCategories.length > 0 && (
                                 <div className="px-4 py-3 border-t border-gray-50 bg-emerald-50/40">
-                                    <p className="text-xs text-emerald-700 font-semibold">
+                                    <p className="text-xs text-emerald-700 font-semibold break-words">
                                         {selectedCategories.length} selected:{" "}
                                         {selectedCategories.map((id) => categories.find((c) => c.id === id)?.name).filter(Boolean).join(", ")}
                                     </p>
@@ -1260,30 +1235,30 @@ export default function AddProductPage({ existingProduct = null, onSaved, onCanc
                         <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-4 text-white shadow-md shadow-emerald-200">
                             <p className="text-xs font-bold uppercase tracking-wider opacity-80 mb-3">Product Summary</p>
                             <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                    <span className="opacity-75">Name</span>
-                                    <span className="font-semibold truncate ml-2 max-w-[140px]">{name || "—"}</span>
+                                <div className="flex justify-between gap-2">
+                                    <span className="opacity-75 flex-shrink-0">Name</span>
+                                    <span className="font-semibold truncate text-right min-w-0">{name || "—"}</span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="opacity-75">SKU</span>
-                                    <span className="font-semibold">{sku}</span>
+                                <div className="flex justify-between gap-2">
+                                    <span className="opacity-75 flex-shrink-0">SKU</span>
+                                    <span className="font-semibold break-all text-right">{sku}</span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="opacity-75">Selling Price</span>
+                                <div className="flex justify-between gap-2">
+                                    <span className="opacity-75 flex-shrink-0">Selling Price</span>
                                     <span className="font-semibold">{sellingPrice ? `৳${sellingPrice}` : "—"}</span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="opacity-75">Stock</span>
+                                <div className="flex justify-between gap-2">
+                                    <span className="opacity-75 flex-shrink-0">Stock</span>
                                     <span className="font-semibold">{stockQty || "—"}</span>
                                 </div>
                                 {variants.length > 0 && (
-                                    <div className="pt-2 border-t border-white/20 flex justify-between">
+                                    <div className="pt-2 border-t border-white/20 flex justify-between gap-2">
                                         <span className="opacity-75">Variants</span>
                                         <span className="font-semibold text-yellow-200">{variants.length} added</span>
                                     </div>
                                 )}
                                 {isEditMode && (
-                                    <div className="pt-2 border-t border-white/20 flex justify-between">
+                                    <div className="pt-2 border-t border-white/20 flex justify-between gap-2">
                                         <span className="opacity-75">Mode</span>
                                         <span className="font-semibold text-yellow-200">✏ Editing</span>
                                     </div>

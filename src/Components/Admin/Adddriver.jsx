@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 const API_BASEA = import.meta.env.VITE_API_URL;
 
 const API_BASE = `${API_BASEA}/api`;
@@ -44,7 +44,21 @@ function validate(form, photo) {
   return errors;
 }
 
+// ─── Responsive hook ──────────────────────────────────────────────────────────
+const useIsMobile = (bp = 900) => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < bp : false
+  );
+  useEffect(() => {
+    const h = () => setIsMobile(window.innerWidth < bp);
+    window.addEventListener("resize", h);
+    return () => window.removeEventListener("resize", h);
+  }, [bp]);
+  return isMobile;
+};
+
 export default function AddDriver() {
+  const isMobile = useIsMobile();
   const [form, setForm] = useState(initialState);
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -119,7 +133,7 @@ export default function AddDriver() {
       formData.append("fullName", fullName);
       formData.append("email", form.email.trim());
       formData.append("phone", form.phone.trim());
-      formData.append("gender", form.gender);        // ← ADD THIS LINE
+      formData.append("gender", form.gender);
       formData.append("vehicleType", form.vehicleType);
       formData.append("vehicleNumber", form.vehicleNumber.trim());
       formData.append("identityType", form.identityType);
@@ -160,38 +174,40 @@ export default function AddDriver() {
           background: #f5f5f4;
           padding: 2rem;
           font-family: 'DM Sans', system-ui, sans-serif;
+          box-sizing: border-box;
+          overflow-x: hidden;
         }
-
         .ad-header {
           display: flex;
           align-items: center;
           gap: 10px;
           margin-bottom: 1.5rem;
+          min-width: 0;
         }
-
         .ad-header-icon {
           width: 36px;
           height: 36px;
+          flex-shrink: 0;
           display: flex;
           align-items: center;
           justify-content: center;
         }
-
         .ad-header h1 {
           font-size: 22px;
           font-weight: 600;
           color: #1c1c1c;
           letter-spacing: -0.3px;
+          margin: 0;
         }
-
         .ad-card {
           background: #fff;
           border: 1px solid #e5e7eb;
           border-radius: 12px;
           padding: 2rem;
           box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+          box-sizing: border-box;
+          min-width: 0;
         }
-
         .ad-section-title {
           display: flex;
           align-items: center;
@@ -203,34 +219,25 @@ export default function AddDriver() {
           padding-bottom: 0.75rem;
           border-bottom: 1px solid #f3f4f6;
         }
-
         .ad-form-layout {
           display: grid;
           grid-template-columns: 1fr 360px;
           gap: 2rem;
+          align-items: start;
         }
-
-        @media (max-width: 900px) {
-          .ad-form-layout { grid-template-columns: 1fr; }
-          .ad-page { padding: 1rem; }
-        }
-
         .ad-form-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1rem 1.25rem;
+          min-width: 0;
         }
-
         .ad-field {
           display: flex;
           flex-direction: column;
           gap: 5px;
+          min-width: 0;
         }
-
-        .ad-field.full {
-          grid-column: 1 / -1;
-        }
-
+        .ad-field.full { grid-column: 1 / -1; }
         .ad-label {
           font-size: 13px;
           font-weight: 500;
@@ -239,16 +246,11 @@ export default function AddDriver() {
           align-items: center;
           gap: 3px;
         }
-
-        .ad-req {
-          color: #ef4444;
-          font-size: 14px;
-          line-height: 1;
-        }
-
+        .ad-req { color: #ef4444; font-size: 14px; line-height: 1; }
         .ad-input,
         .ad-select {
           width: 100%;
+          min-width: 0;
           padding: 9px 12px;
           font-size: 14px;
           font-family: inherit;
@@ -257,31 +259,23 @@ export default function AddDriver() {
           background: #fff;
           color: #1c1c1c;
           outline: none;
+          box-sizing: border-box;
           transition: border-color 0.15s, box-shadow 0.15s;
           appearance: none;
           -webkit-appearance: none;
         }
-
         .ad-input:focus,
         .ad-select:focus {
           border-color: #16a34a;
           box-shadow: 0 0 0 3px rgba(22,163,74,0.1);
         }
-
-        .ad-input::placeholder {
-          color: #9ca3af;
-        }
-
+        .ad-input::placeholder { color: #9ca3af; }
         .ad-input.error,
         .ad-select.error {
           border-color: #ef4444;
           box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
         }
-
-        .ad-select-wrap {
-          position: relative;
-        }
-
+        .ad-select-wrap { position: relative; }
         .ad-select-wrap::after {
           content: '';
           position: absolute;
@@ -295,30 +289,20 @@ export default function AddDriver() {
           border-top: 5px solid #6b7280;
           pointer-events: none;
         }
+        .ad-field-error { font-size: 11.5px; color: #ef4444; font-weight: 400; }
 
-        .ad-field-error {
-          font-size: 11.5px;
-          color: #ef4444;
-          font-weight: 400;
-        }
-
-        /* Photo Upload */
+        /* Photo upload */
         .ad-photo-label {
           font-size: 13px;
           font-weight: 500;
           color: #374151;
-          margin-bottom: 8px;
+          margin: 0 0 8px;
           display: flex;
           align-items: center;
           gap: 4px;
           flex-wrap: wrap;
         }
-
-        .ad-photo-ratio {
-          color: #16a34a;
-          font-weight: 500;
-        }
-
+        .ad-photo-ratio { color: #16a34a; font-weight: 500; }
         .ad-photo-box {
           width: 100%;
           aspect-ratio: 1;
@@ -333,24 +317,13 @@ export default function AddDriver() {
           gap: 8px;
           position: relative;
           overflow: hidden;
+          box-sizing: border-box;
           transition: border-color 0.15s, background 0.15s;
         }
-
         .ad-photo-box:hover,
-        .ad-photo-box.drag-over {
-          border-color: #16a34a;
-          background: #f0fdf4;
-        }
-
-        .ad-photo-box.has-photo {
-          border-style: solid;
-          border-color: #16a34a;
-        }
-
-        .ad-photo-box.photo-error {
-          border-color: #ef4444;
-        }
-
+        .ad-photo-box.drag-over { border-color: #16a34a; background: #f0fdf4; }
+        .ad-photo-box.has-photo { border-style: solid; border-color: #16a34a; }
+        .ad-photo-box.photo-error { border-color: #ef4444; }
         .ad-photo-img {
           position: absolute;
           inset: 0;
@@ -358,7 +331,6 @@ export default function AddDriver() {
           height: 100%;
           object-fit: cover;
         }
-
         .ad-photo-overlay {
           position: absolute;
           inset: 0;
@@ -369,44 +341,27 @@ export default function AddDriver() {
           opacity: 0;
           transition: opacity 0.15s;
         }
-
-        .ad-photo-box.has-photo:hover .ad-photo-overlay {
-          opacity: 1;
-        }
-
+        .ad-photo-box.has-photo:hover .ad-photo-overlay { opacity: 1; }
         .ad-photo-hint {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 6px;
           pointer-events: none;
+          padding: 12px;
+          text-align: center;
         }
-
-        .ad-photo-hint svg {
-          width: 40px;
-          height: 40px;
-          color: #9ca3af;
-        }
-
-        .ad-photo-hint span {
-          font-size: 13px;
-          color: #6b7280;
-          font-weight: 500;
-        }
-
-        .ad-photo-hint small {
-          font-size: 11px;
-          color: #9ca3af;
-        }
-
+        .ad-photo-hint svg { width: 40px; height: 40px; color: #9ca3af; }
+        .ad-photo-hint span { font-size: 13px; color: #6b7280; font-weight: 500; }
+        .ad-photo-hint small { font-size: 11px; color: #9ca3af; }
         .ad-photo-remove {
           position: absolute;
           top: 8px;
           right: 8px;
-          width: 28px;
-          height: 28px;
+          width: 34px;
+          height: 34px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.9);
+          background: rgba(255,255,255,0.95);
           border: none;
           cursor: pointer;
           display: flex;
@@ -417,25 +372,27 @@ export default function AddDriver() {
           color: #374151;
           transition: background 0.1s;
         }
-
-        .ad-photo-remove:hover {
-          background: #fee2e2;
-          color: #ef4444;
+        .ad-photo-remove:hover { background: #fee2e2; color: #ef4444; }
+        .ad-photo-formats { font-size: 11.5px; color: #9ca3af; margin-top: 5px; }
+        .ad-change-btn {
+          background: rgba(255,255,255,0.95);
+          border: none;
+          border-radius: 6px;
+          padding: 8px 16px;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          color: #374151;
+          font-family: inherit;
         }
-
-        .ad-photo-formats {
-          font-size: 11.5px;
-          color: #9ca3af;
-          margin-top: 5px;
-        }
-
         .ad-right-col {
           display: flex;
           flex-direction: column;
           gap: 1rem;
+          min-width: 0;
         }
 
-        /* Submit Row */
+        /* Submit */
         .ad-submit-row {
           display: flex;
           justify-content: flex-end;
@@ -443,7 +400,6 @@ export default function AddDriver() {
           padding-top: 1.25rem;
           border-top: 1px solid #f3f4f6;
         }
-
         .ad-btn-submit {
           background: #16a34a;
           color: #fff;
@@ -456,15 +412,15 @@ export default function AddDriver() {
           cursor: pointer;
           display: flex;
           align-items: center;
+          justify-content: center;
           gap: 8px;
           letter-spacing: 0.1px;
+          min-height: 40px;
           transition: background 0.15s, transform 0.1s;
         }
-
         .ad-btn-submit:hover:not(:disabled) { background: #15803d; }
         .ad-btn-submit:active:not(:disabled) { transform: scale(0.98); }
         .ad-btn-submit:disabled { background: #86efac; cursor: not-allowed; }
-
         .ad-spinner {
           width: 15px;
           height: 15px;
@@ -474,7 +430,6 @@ export default function AddDriver() {
           animation: ad-spin 0.65s linear infinite;
           flex-shrink: 0;
         }
-
         @keyframes ad-spin { to { transform: rotate(360deg); } }
 
         /* Toast */
@@ -494,20 +449,10 @@ export default function AddDriver() {
           box-shadow: 0 4px 20px rgba(0,0,0,0.13);
           animation: ad-toast-in 0.25s ease;
           max-width: 360px;
+          box-sizing: border-box;
         }
-
-        .ad-toast.success {
-          background: #f0fdf4;
-          border: 1px solid #bbf7d0;
-          color: #166534;
-        }
-
-        .ad-toast.error {
-          background: #fef2f2;
-          border: 1px solid #fecaca;
-          color: #991b1b;
-        }
-
+        .ad-toast.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+        .ad-toast.error { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
         .ad-toast-icon {
           width: 20px;
           height: 20px;
@@ -519,13 +464,36 @@ export default function AddDriver() {
           font-size: 11px;
           font-weight: 700;
         }
-
         .ad-toast.success .ad-toast-icon { background: #16a34a; color: #fff; }
         .ad-toast.error .ad-toast-icon { background: #ef4444; color: #fff; }
-
         @keyframes ad-toast-in {
           from { opacity: 0; transform: translateY(12px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 900px) {
+          .ad-form-layout { grid-template-columns: 1fr; gap: 1.5rem; }
+          .ad-page { padding: 1rem; }
+          .ad-card { padding: 1.25rem; }
+          .ad-right-col { order: -1; }
+          .ad-photo-box { aspect-ratio: 16 / 9; }
+          .ad-submit-row { justify-content: stretch; }
+          .ad-btn-submit { width: 100%; padding: 13px 16px; font-size: 15px; }
+        }
+        @media (max-width: 600px) {
+          .ad-form-grid { grid-template-columns: 1fr; }
+          .ad-header h1 { font-size: 19px; }
+          .ad-input,
+          .ad-select { font-size: 16px; padding: 11px 12px; }
+          .ad-toast {
+            left: 1rem;
+            right: 1rem;
+            bottom: 1rem;
+            max-width: none;
+            justify-content: center;
+          }
+          .ad-photo-box { aspect-ratio: 4 / 3; }
         }
       `}</style>
 
@@ -551,149 +519,8 @@ export default function AddDriver() {
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="ad-form-layout">
-              {/* Left Column */}
-              <div className="ad-form-grid">
-                {/* First Name */}
-                <div className="ad-field">
-                  <label className="ad-label">
-                    First Name <span className="ad-req">*</span>
-                  </label>
-                  <input
-                    className={`ad-input ${errors.firstName ? "error" : ""}`}
-                    type="text"
-                    name="firstName"
-                    value={form.firstName}
-                    onChange={handleChange}
-                    placeholder="Enter first name"
-                    autoComplete="given-name"
-                  />
-                  {errors.firstName && (
-                    <span className="ad-field-error">{errors.firstName}</span>
-                  )}
-                </div>
-
-                {/* Last Name */}
-                <div className="ad-field">
-                  <label className="ad-label">Last Name</label>
-                  <input
-                    className="ad-input"
-                    type="text"
-                    name="lastName"
-                    value={form.lastName}
-                    onChange={handleChange}
-                    placeholder="Enter last name"
-                    autoComplete="family-name"
-                  />
-                </div>
-
-                {/* Phone */}
-                <div className="ad-field full">
-                  <label className="ad-label">
-                    Phone Number <span className="ad-req">*</span>
-                  </label>
-                  <input
-                    className={`ad-input ${errors.phone ? "error" : ""}`}
-                    type="text"
-                    name="phone"
-                    value={form.phone}
-                    onChange={handleChange}
-                    placeholder="Enter phone number"
-                    autoComplete="tel"
-                  />
-                  {errors.phone && (
-                    <span className="ad-field-error">{errors.phone}</span>
-                  )}
-                </div>
-
-                {/* Email */}
-                <div className="ad-field full">
-                  <label className="ad-label">Email</label>
-                  <input
-                    className={`ad-input ${errors.email ? "error" : ""}`}
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="Enter Email Address"
-                    autoComplete="email"
-                  />
-                  {errors.email && (
-                    <span className="ad-field-error">{errors.email}</span>
-                  )}
-                </div>
-
-                {/* Gender */}
-                <div className="ad-field full">
-                  <label className="ad-label">Gender</label>
-                  <div className="ad-select-wrap">
-                    <select
-                      className="ad-select"
-                      name="gender"
-                      value={form.gender}
-                      onChange={handleChange}
-                    >
-                      {GENDERS.map((g) => (
-                        <option key={g} value={g}>{g}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Driving License */}
-                <div className="ad-field full">
-                  <label className="ad-label">Driving License</label>
-                  <input
-                    className="ad-input"
-                    type="text"
-                    name="drivingLicense"
-                    value={form.drivingLicense}
-                    onChange={handleChange}
-                    placeholder="Enter License"
-                  />
-                </div>
-
-                {/* Password */}
-                <div className="ad-field">
-                  <label className="ad-label">
-                    Password <span className="ad-req">*</span>
-                  </label>
-                  <input
-                    className={`ad-input ${errors.password ? "error" : ""}`}
-                    type="password"
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
-                    placeholder="Enter Password"
-                    autoComplete="new-password"
-                  />
-                  {errors.password && (
-                    <span className="ad-field-error">{errors.password}</span>
-                  )}
-                </div>
-
-                {/* Confirm Password */}
-                <div className="ad-field">
-                  <label className="ad-label">
-                    Confirm Password <span className="ad-req">*</span>
-                  </label>
-                  <input
-                    className={`ad-input ${errors.confirmPassword ? "error" : ""}`}
-                    type="password"
-                    name="confirmPassword"
-                    value={form.confirmPassword}
-                    onChange={handleChange}
-                    placeholder="Enter Confirm Password"
-                    autoComplete="new-password"
-                  />
-                  {errors.confirmPassword && (
-                    <span className="ad-field-error">{errors.confirmPassword}</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Right Column */}
+              {/* Right column (photo) — rendered first in DOM so it sits on top on mobile */}
               <div className="ad-right-col">
-                {/* Profile Photo */}
                 <div>
                   <p className="ad-photo-label">
                     Profile Photo{" "}
@@ -713,8 +540,8 @@ export default function AddDriver() {
                         <div className="ad-photo-overlay">
                           <button
                             type="button"
+                            className="ad-change-btn"
                             onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                            style={{ background: "rgba(255,255,255,0.9)", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer", color: "#374151" }}
                           >
                             Change Photo
                           </button>
@@ -724,6 +551,7 @@ export default function AddDriver() {
                           className="ad-photo-remove"
                           onClick={(e) => { e.stopPropagation(); removePhoto(); }}
                           title="Remove photo"
+                          aria-label="Remove photo"
                         >
                           ✕
                         </button>
@@ -735,15 +563,13 @@ export default function AddDriver() {
                           <circle cx="8.5" cy="8.5" r="1.5" />
                           <polyline points="21 15 16 10 5 21" />
                         </svg>
-                        <span>Click or drag to upload</span>
+                        <span>Tap or drag to upload</span>
                         <small>500 × 500 px recommended</small>
                       </div>
                     )}
                   </div>
                   <p className="ad-photo-formats">Supported formats: jpg, jpeg, png</p>
-                  {errors.photo && (
-                    <span className="ad-field-error">{errors.photo}</span>
-                  )}
+                  {errors.photo && <span className="ad-field-error">{errors.photo}</span>}
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -753,19 +579,11 @@ export default function AddDriver() {
                   />
                 </div>
 
-                {/* Date of Birth */}
                 <div className="ad-field">
                   <label className="ad-label">Date of Birth</label>
-                  <input
-                    className="ad-input"
-                    type="date"
-                    name="dob"
-                    value={form.dob}
-                    onChange={handleChange}
-                  />
+                  <input className="ad-input" type="date" name="dob" value={form.dob} onChange={handleChange} />
                 </div>
 
-                {/* Vehicle Type */}
                 <div className="ad-field">
                   <label className="ad-label">
                     Vehicle Type <span className="ad-req">*</span>
@@ -783,12 +601,9 @@ export default function AddDriver() {
                       ))}
                     </select>
                   </div>
-                  {errors.vehicleType && (
-                    <span className="ad-field-error">{errors.vehicleType}</span>
-                  )}
+                  {errors.vehicleType && <span className="ad-field-error">{errors.vehicleType}</span>}
                 </div>
 
-                {/* Vehicle Number */}
                 <div className="ad-field">
                   <label className="ad-label">Vehicle Number</label>
                   <input
@@ -801,7 +616,6 @@ export default function AddDriver() {
                   />
                 </div>
 
-                {/* Identity Type */}
                 <div className="ad-field">
                   <label className="ad-label">
                     Identity Type <span className="ad-req">*</span>
@@ -819,12 +633,9 @@ export default function AddDriver() {
                       ))}
                     </select>
                   </div>
-                  {errors.identityType && (
-                    <span className="ad-field-error">{errors.identityType}</span>
-                  )}
+                  {errors.identityType && <span className="ad-field-error">{errors.identityType}</span>}
                 </div>
 
-                {/* Identity Number */}
                 <div className="ad-field">
                   <label className="ad-label">
                     Identity Number <span className="ad-req">*</span>
@@ -837,9 +648,126 @@ export default function AddDriver() {
                     onChange={handleChange}
                     placeholder="Enter identity number"
                   />
-                  {errors.identityNumber && (
-                    <span className="ad-field-error">{errors.identityNumber}</span>
-                  )}
+                  {errors.identityNumber && <span className="ad-field-error">{errors.identityNumber}</span>}
+                </div>
+              </div>
+
+              {/* Left column (personal info) */}
+              <div className="ad-form-grid">
+                <div className="ad-field">
+                  <label className="ad-label">
+                    First Name <span className="ad-req">*</span>
+                  </label>
+                  <input
+                    className={`ad-input ${errors.firstName ? "error" : ""}`}
+                    type="text"
+                    name="firstName"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    placeholder="Enter first name"
+                    autoComplete="given-name"
+                  />
+                  {errors.firstName && <span className="ad-field-error">{errors.firstName}</span>}
+                </div>
+
+                <div className="ad-field">
+                  <label className="ad-label">Last Name</label>
+                  <input
+                    className="ad-input"
+                    type="text"
+                    name="lastName"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    placeholder="Enter last name"
+                    autoComplete="family-name"
+                  />
+                </div>
+
+                <div className="ad-field full">
+                  <label className="ad-label">
+                    Phone Number <span className="ad-req">*</span>
+                  </label>
+                  <input
+                    className={`ad-input ${errors.phone ? "error" : ""}`}
+                    type="tel"
+                    inputMode="tel"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    placeholder="Enter phone number"
+                    autoComplete="tel"
+                  />
+                  {errors.phone && <span className="ad-field-error">{errors.phone}</span>}
+                </div>
+
+                <div className="ad-field full">
+                  <label className="ad-label">Email</label>
+                  <input
+                    className={`ad-input ${errors.email ? "error" : ""}`}
+                    type="email"
+                    inputMode="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="Enter Email Address"
+                    autoComplete="email"
+                  />
+                  {errors.email && <span className="ad-field-error">{errors.email}</span>}
+                </div>
+
+                <div className="ad-field full">
+                  <label className="ad-label">Gender</label>
+                  <div className="ad-select-wrap">
+                    <select className="ad-select" name="gender" value={form.gender} onChange={handleChange}>
+                      {GENDERS.map((g) => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="ad-field full">
+                  <label className="ad-label">Driving License</label>
+                  <input
+                    className="ad-input"
+                    type="text"
+                    name="drivingLicense"
+                    value={form.drivingLicense}
+                    onChange={handleChange}
+                    placeholder="Enter License"
+                  />
+                </div>
+
+                <div className="ad-field">
+                  <label className="ad-label">
+                    Password <span className="ad-req">*</span>
+                  </label>
+                  <input
+                    className={`ad-input ${errors.password ? "error" : ""}`}
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="Enter Password"
+                    autoComplete="new-password"
+                  />
+                  {errors.password && <span className="ad-field-error">{errors.password}</span>}
+                </div>
+
+                <div className="ad-field">
+                  <label className="ad-label">
+                    Confirm Password <span className="ad-req">*</span>
+                  </label>
+                  <input
+                    className={`ad-input ${errors.confirmPassword ? "error" : ""}`}
+                    type="password"
+                    name="confirmPassword"
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Enter Confirm Password"
+                    autoComplete="new-password"
+                  />
+                  {errors.confirmPassword && <span className="ad-field-error">{errors.confirmPassword}</span>}
                 </div>
               </div>
             </div>
@@ -862,9 +790,7 @@ export default function AddDriver() {
 
       {toast && (
         <div className={`ad-toast ${toast.type}`}>
-          <div className="ad-toast-icon">
-            {toast.type === "success" ? "✓" : "✕"}
-          </div>
+          <div className="ad-toast-icon">{toast.type === "success" ? "✓" : "✕"}</div>
           {toast.message}
         </div>
       )}
